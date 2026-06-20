@@ -1,81 +1,86 @@
-# Process-Guard: Auditoría de SQA Multi-Modelo en Cursor
+# Process-Guard Control Arena: Framework de AI Control en Cursor
 
-Esta arquitectura define el prototipo de **Process-Guard** integrado en la API del editor Cursor. El sistema selecciona **3 modelos de lenguaje disponibles** en el entorno y hace que cada uno de ellos actúe de manera independiente para ejecutar **3 tareas/skills especializadas de calidad**, generando un total de **9 reportes de auditoría** para comparar y cruzar resultados.
+Esta arquitectura define el prototipo de **Process-Guard**, pero ahora pivotado hacia el track de **AI Control** (AI Security), tomando inspiración en entornos de evaluación como **Linux Arena**. 
+
+El objetivo principal es resolver el problema de la **"Guerra del Código de IA"**: el desarrollo ad-hoc asistido por IA donde el código se genera rápidamente, pero la ingeniería de software y los procesos desaparecen, generando una inmensa deuda técnica, alucinaciones y vulnerabilidades.
+
+Process-Guard no es solo una herramienta, sino un **nuevo marco de referencia de desarrollo** integrado en la API de Cursor. Obliga al código y a la arquitectura a pasar por una "Arena de Control" estricta basada en el estándar SWEBOK, usando modelos de IA como auditores implacables.
 
 ---
 
-## Flujo de Ejecución por Modelo
+## La "Arena de Control" Multi-Modelo
 
-El flujo distribuye el análisis del proyecto a través de **3 modelos de IA concurrentes**. Cada modelo es responsable de ejecutar la auditoría de las 3 áreas de SQA definidas:
+Para garantizar el control y evitar depender de las alucinaciones de un único LLM, el sistema selecciona **3 modelos de lenguaje disponibles** en el entorno (ej. Claude, Gemini, GPT-4). 
+
+Cada modelo actúa de manera independiente en la "Arena" ejecutando **3 tareas/skills especializadas de control de calidad**, generando un total de **9 reportes de auditoría** para comparar y cruzar resultados (validación cruzada).
 
 ```mermaid
 graph TD
-    A[Markdown de Documentación] --> B[Process-Guard en Cursor API]
-    B --> M1[Modelo 1: ej. Claude]
-    B --> M2[Modelo 2: ej. Gemini]
-    B --> M3[Modelo 3: ej. GPT-4]
+    A[Código y Documentación] --> B[Process-Guard Control Arena]
+    B --> M1[Auditor 1: ej. Claude]
+    B --> M2[Auditor 2: ej. Gemini]
+    B --> M3[Auditor 3: ej. GPT-4]
     
-    subgraph Modelo 1: Auditoría Completa
-        M1 --> M1_Req[Skill 1: Ingeniería de Requisitos]
-        M1 --> M1_SQA[Skill 2: Aseguramiento SQA]
-        M1 --> M1_Test[Skill 3: Validación & Testing]
+    subgraph Evaluación de Control M1
+        M1 --> M1_Req[Skill 1: Control de Requisitos]
+        M1 --> M1_SQA[Skill 2: Control SQA e ISO]
+        M1 --> M1_Test[Skill 3: Control de Testing]
     end
     
-    subgraph Modelo 2: Auditoría Completa
-        M2 --> M2_Req[Skill 1: Ingeniería de Requisitos]
-        M2 --> M2_SQA[Skill 2: Aseguramiento SQA]
-        M2 --> M2_Test[Skill 3: Validación & Testing]
+    subgraph Evaluación de Control M2
+        M2 --> M2_Req[Skill 1: Control de Requisitos]
+        M2 --> M2_SQA[Skill 2: Control SQA e ISO]
+        M2 --> M2_Test[Skill 3: Control de Testing]
     end
     
-    subgraph Modelo 3: Auditoría Completa
-        M3 --> M3_Req[Skill 1: Ingeniería de Requisitos]
-        M3 --> M3_SQA[Skill 2: Aseguramiento SQA]
-        M3 --> M3_Test[Skill 3: Validación & Testing]
+    subgraph Evaluación de Control M3
+        M3 --> M3_Req[Skill 1: Control de Requisitos]
+        M3 --> M3_SQA[Skill 2: Control SQA e ISO]
+        M3 --> M3_Test[Skill 3: Control de Testing]
     end
 
-    M1_Req --> R1[Reporte Requisitos M1]
+    M1_Req --> R1[Reporte Req M1]
     M1_SQA --> R2[Reporte SQA M1]
-    M1_Test --> R3[Reporte Testing M1]
+    M1_Test --> R3[Reporte Test M1]
     
-    M2_Req --> R4[Reporte Requisitos M2]
+    M2_Req --> R4[Reporte Req M2]
     M2_SQA --> R5[Reporte SQA M2]
-    M2_Test --> R6[Reporte Testing M2]
+    M2_Test --> R6[Reporte Test M2]
     
-    M3_Req --> R7[Reporte Requisitos M3]
+    M3_Req --> R7[Reporte Req M3]
     M3_SQA --> R8[Reporte SQA M3]
-    M3_Test --> R9[Reporte Testing M3]
+    M3_Test --> R9[Reporte Test M3]
 ```
 
 ---
 
-##  Las 3 Skills/Tareas Especializadas (Ejecutadas por cada Modelo)
+## Las 3 Skills Especializadas de la Arena (Evaluación SWEBOK)
 
-Cada uno de los 3 modelos ejecuta de manera independiente las siguientes tareas sobre los archivos Markdown del proyecto:
+### 1. Skill 1: Control de Requisitos
+* **Objetivo:** Analizar la especificación técnica en busca de "huecos raros", ambigüedades, y asegurar que el código generado no se haya desviado del requerimiento inicial.
+* **Resultado:** Auditorías (`requisitos_modelo[1-3].md`).
 
-### 1. Skill 1: Ingeniería de Requisitos (Estándar SWEBOK)
-* **Objetivo:** Analizar la especificación técnica en busca de "huecos raros", ambigüedades lógicas, requerimientos incompletos o inconsistentes.
-* **Resultado:** Cada modelo genera su propia auditoría de requisitos (`requisitos_modelo1.md`, `requisitos_modelo2.md`, `requisitos_modelo3.md`).
+### 2. Skill 2: Control de Arquitectura y Procesos SQA (Galin / ISO)
+* **Objetivo:** Evaluar la gobernanza técnica. ¿El código respeta modularidad? ¿Existen procesos de desarrollo o es solo código "escupido" por IA?
+* **Resultado:** Reportes de conformidad de procesos (`sqa_modelo[1-3].md`).
 
-### 2. Skill 2: Procesos y Arquitectura SQA (Estándares Galin / ISO 25010)
-* **Objetivo:** Evaluar la gobernanza del proceso de desarrollo, la modularidad y mantenibilidad descritas en el diseño del software.
-* **Resultado:** Cada modelo genera su reporte de conformidad de procesos (`sqa_modelo1.md`, `sqa_modelo2.md`, `sqa_modelo3.md`).
-
-### 3. Skill 3: Verificación y Validación - SQ (Testing)
-* **Objetivo:** Verificar si la planificación incluye criterios de aceptación robustos para cada caso de uso y pruebas críticas de regresión/fallo.
-* **Resultado:** Cada modelo genera su plan de auditoría de pruebas (`testing_modelo1.md`, `testing_modelo2.md`, `testing_modelo3.md`).
+### 3. Skill 3: Control de Verificación y Testing
+* **Objetivo:** Validar si existen criterios de aceptación y pruebas críticas de regresión para contener posibles fallos introducidos por generaciones automatizadas.
+* **Resultado:** Planes de auditoría de pruebas (`testing_modelo[1-3].md`).
 
 ---
 
-## Matriz de Comparación y Consenso de Resultados
+## Consenso y Resultados: El Veredicto de la Arena
 
-Al finalizar el proceso, la API de Cursor consolida una matriz con los **9 reportes generados**, agrupados por especialidad para facilitar la detección de discrepancias:
+Al finalizar, la API consolida una matriz con los **9 reportes generados**. Al igual que en *LMSYS Chatbot Arena* o *Linux Arena*, se busca el consenso o se exponen las discrepancias.
 
-| Especialidad | Reporte Modelo 1 (ej. Claude) | Reporte Modelo 2 (ej. Gemini) | Reporte Modelo 3 (ej. GPT-4) | Estado de Consenso / Hallazgos |
+| Especialidad (Control) | Auditor 1 | Auditor 2 | Auditor 3 | Veredicto Final de Control |
 | :--- | :--- | :--- | :--- | :--- |
-| **Ingeniería de Requisitos** | `requisitos_m1.md` | `requisitos_m2.md` | `requisitos_m3.md` | *Comparación de discrepancias en la especificación.* |
-| **Aseguramiento SQA** | `sqa_m1.md` | `sqa_m2.md` | `sqa_m3.md` | *Consenso sobre la conformidad y arquitectura del proceso.* |
-| **Validación y Testing** | `testing_m1.md` | `testing_m2.md` | `testing_m3.md` | *Validación cruzada sobre los planes de pruebas planteados.* |
+| **Control de Requisitos** | `req_m1.md` | `req_m2.md` | `req_m3.md` | *Cruces y discrepancias en lógica.* |
+| **Arquitectura SQA** | `sqa_m1.md` | `sqa_m2.md` | `sqa_m3.md` | *Evaluación de la deuda técnica.* |
+| **Testing** | `test_m1.md` | `test_m2.md` | `test_m3.md` | *Validación cruzada de seguridad y QA.* |
 
-### Beneficio de esta Estructura de Prototipo:
-* **Confiabilidad:** Permite contrastar de inmediato cómo evalúa cada LLM el mismo código/diseño de software. Si Claude detecta un error de testing crítico pero Gemini y GPT-4 lo omiten, el desarrollador puede investigar la discrepancia directamente.
-* **Integración en la API de Cursor:** La extensión lee los modelos configurados por el usuario y los dispara de forma secuencial o paralela según las capacidades de la API de Cursor en ese momento.
+### Propuesta de Valor ante el Jurado
+1. **Alineación con AI Control:** Demuestra un mecanismo estricto donde la IA vigila a la IA ("Controladores") para evitar resultados nocivos.
+2. **Combate la "Guerra del Código":** Restaura los procesos de Ingeniería de Software que el *live coding* y la generación rápida han destruido.
+3. **Escalabilidad:** Implementado directamente en la API de Cursor para interceptar los errores de forma nativa en el flujo de trabajo del desarrollador.
