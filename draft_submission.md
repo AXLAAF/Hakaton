@@ -1,6 +1,6 @@
-# Process-Guard Control Arena: Multi-Model AI Control for Software Quality Assurance
+# HAZE (Hallucination-Aware, Audit, Zero-trust, Evaluation)
 
-**Authors:** [Team Names]
+**Authors:** Samuel Blanco, Samuel Diaz, Alex Novelo, Axel Morales
 
 **Track:** AI Security → AI Control · **Venue:** Global South AI Safety Hackathon (June 2026)
 
