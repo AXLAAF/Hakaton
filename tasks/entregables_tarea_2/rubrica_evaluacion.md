@@ -1,6 +1,6 @@
 # Rúbricas de Evaluación: Process-Guard Control Arena
 
-Estas rúbricas definen los criterios estandarizados que los modelos de lenguaje utilizarán para auditar los artefactos en la Arena de Evaluación. Las rúbricas se fundamentan en estándares internacionales (SWEBOK v3.0, ISO/IEC 25010, OWASP Top 10 para LLMs y NIST AI RMF) para garantizar que la evaluación sea rigurosa, imparcial y técnica, distanciándose de opiniones subjetivas.
+Estas rúbricas definen los criterios estandarizados que los modelos de lenguaje utilizarán para auditar los artefactos en la Arena de Evaluación. Las rúbricas se fundamentan en estándares internacionales (SWEBOK v3.0, ISO/IEC 25010, OWASP Top 10 para LLMs, NIST AI RMF, ISO/IEC/IEEE 29148 y 42010) para garantizar que la evaluación sea rigurosa, imparcial y técnica, distanciándose de opiniones subjetivas.
 
 ## 1. Evaluación de Requisitos (Artefacto Tipo A1)
 Esta rúbrica se aplica a especificaciones de software, historias de usuario, o documentos de requerimientos funcionales y no funcionales.
@@ -9,9 +9,9 @@ Esta rúbrica se aplica a especificaciones de software, historias de usuario, o 
 |----|----------|------------------|------|---------------------------------------|
 | **C1** | Completitud | SWEBOK § Requirements | 20% | ¿El documento aborda todos los escenarios posibles, incluyendo casos borde y excepciones? |
 | **C2** | Consistencia | SWEBOK § Requirements | 20% | ¿El documento está libre de contradicciones lógicas entre diferentes requisitos? |
-| **C3** | No ambigüedad | IEEE 830 | 20% | ¿Cada requerimiento tiene una y solo una interpretación posible por parte de un desarrollador? |
+| **C3** | No ambigüedad | ISO/IEC/IEEE 29148 / IEEE 830 | 20% | ¿Cada requerimiento tiene una y solo una interpretación posible por parte de un desarrollador? |
 | **C4** | Verificabilidad | SWEBOK § V&V | 20% | ¿Es posible diseñar una prueba objetiva (criterio de aceptación) que demuestre que el requisito se ha cumplido? |
-| **C5** | Trazabilidad | SWEBOK § Requirements | 20% | ¿El requisito se vincula claramente a un objetivo de negocio o de sistema superior? |
+| **C5** | Trazabilidad | BABOK / SWEBOK | 20% | ¿El requisito se vincula claramente a un objetivo de negocio o de sistema superior? |
 
 ---
 
@@ -23,8 +23,8 @@ Esta rúbrica se aplica a diagramas de flujo, documentos UML, descripciones arqu
 | **C1** | Cohesión y Acoplamiento | SWEBOK § Software Design | 25% | ¿El diseño promueve alta cohesión dentro de los módulos y bajo acoplamiento entre ellos? |
 | **C2** | Seguridad por Diseño | NIST AI RMF / OWASP | 25% | ¿Se identifican superficies de ataque y se aplican principios de mínimo privilegio y defensa en profundidad? |
 | **C3** | Eficiencia y Escalabilidad | ISO 25010 § Performance Efficiency | 20% | ¿El diseño contempla un manejo adecuado de recursos y soporta crecimiento sin deterioro estructural? |
-| **C4** | Trazabilidad hacia Requisitos | SWEBOK § Software Design | 15% | ¿Todas las decisiones de diseño pueden ser directamente justificadas y vinculadas a un requerimiento funcional (A1)? |
-| **C5** | Patrones y Estandarización | SWEBOK § Software Design | 15% | ¿Se utilizan patrones de diseño y arquitectónicos reconocidos, justificando su elección frente a alternativas? |
+| **C4** | Trazabilidad hacia Requisitos | SWEBOK / TOGAF | 15% | ¿Todas las decisiones de diseño pueden ser directamente justificadas y vinculadas a un requerimiento funcional (A1)? |
+| **C5** | Patrones y Estandarización | ISO/IEC/IEEE 42010 | 15% | ¿Se utilizan patrones de diseño y arquitectónicos reconocidos, justificando su elección frente a alternativas? |
 
 ---
 
