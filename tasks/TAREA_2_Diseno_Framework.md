@@ -114,15 +114,23 @@ El documento detallado está en `tasks/entregables_tarea_2/especificacion_casos_
 
 ---
 
+### 2.7 Especificación de Requisitos de Software (SRS) (Estándar ISO/IEC/IEEE 29148:2018)
+
+Se elaboró la especificación formal de requisitos de software (SRS) para el proyecto general de Process-Guard Control Arena, estructurando de manera jerárquica los requisitos funcionales (gestión de ingesta, colas asíncronas BullMQ/Redis, orquestación OpenRouter y síntesis métrica de alucinaciones) y requisitos no funcionales (rendimiento, seguridad, fiabilidad y mantenibilidad bajo ISO/IEC 25010 y OWASP).
+El entregable se encuentra redactado en `tasks/entregables_tarea_2/especificacion_requisitos_srs.md`.
+
+---
+
 ## Formato de Entrega (Finalizado)
 
 Entregables ubicados en `tasks/entregables_tarea_2/`:
 1. [x] `paper_seccion_3_metodologia.md` — Sección 3 redactada.
 2. [x] `rubrica_evaluacion.md` — Tablas de criterios por tipo de artefacto (A1 a A4).
-3. [x] `especificacion_casos_uso.md` — Especificación formal de casos de uso (ISO 29148).
-4. [x] `diagrams/figura_1_arquitectura.md` — Diagrama de arquitectura en formato Obsidian.
-5. [x] `diagrams/figura_2_ciclo_vida.md` — Diagrama de ciclo de vida en formato Obsidian.
-6. [x] `diagrams/figura_3_casos_uso.md` — Diagrama de casos de uso UML en formato Obsidian.
+3. [x] `especificacion_requisitos_srs.md` — Especificación de Requisitos de Software (SRS - ISO 29148).
+4. [x] `especificacion_casos_uso.md` — Especificación formal de casos de uso (ISO 29148).
+5. [x] `diagrams/figura_1_arquitectura.md` — Diagrama de arquitectura en formato Obsidian.
+6. [x] `diagrams/figura_2_ciclo_vida.md` — Diagrama de ciclo de vida en formato Obsidian.
+7. [x] `diagrams/figura_3_casos_uso.md` — Diagrama de casos de uso UML en formato Obsidian.
 
 ---
 
@@ -135,4 +143,6 @@ Entregables ubicados en `tasks/entregables_tarea_2/`:
 - [x] Las decisiones de diseño están justificadas con razonamiento
 - [x] Hay al menos 1 figura de arquitectura en el paper
 - [x] Los casos de uso de diseño y su flujo operativo están definidos bajo un estándar internacional (ISO/IEC/IEEE 29148 / UML)
+- [x] Se elabora la Especificación de Requisitos de Software (SRS) de todo el proyecto general bajo el estándar ISO/IEC/IEEE 29148:2018
+
 
