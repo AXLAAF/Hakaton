@@ -6,9 +6,11 @@ graph TD
     VPS --> API[Process-Guard API\nFastify + Node.js]
     API --> ORCH[Orquestador de Tareas\nBullMQ + Redis]
     
-    ORCH -->|Worker Asíncrono| M1[Claude 3.5 Sonnet\nAnthropic API]
-    ORCH -->|Worker Asíncrono| M2[Gemini 1.5 Pro\nGoogle GenAI API]
-    ORCH -->|Worker Asíncrono| M3[GPT-4o\nOpenAI API]
+    ORCH -->|API Key Unificada| OR_PROXY{OpenRouter API Gateway}
+    
+    OR_PROXY -->|Prompt Evaluación| M1[Claude 3.5 Sonnet]
+    OR_PROXY -->|Prompt Evaluación| M2[Gemini 1.5 Pro]
+    OR_PROXY -->|Prompt Evaluación| M3[GPT-4o]
     
     M1 -->|Reporte JSON| SYNTH[Sintetizador\nDetección de Outliers]
     M2 -->|Reporte JSON| SYNTH
