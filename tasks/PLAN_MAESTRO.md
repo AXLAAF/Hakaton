@@ -8,7 +8,7 @@
 
 ## Resumen del Proyecto
 
-**Process-Guard Control Arena** es un framework de AI Control que audita artefactos de software (código, skills, requisitos) enviándolos a 3 LLMs distintos en paralelo (Claude, Gemini, GPT-4). Cada modelo evalúa contra rúbricas formales (SWEBOK/ISO 25010), emite un reporte con métrica parcial (0-100), y un sintetizador detecta alucinaciones por discrepancia y emite una calificación cuantificable final.
+**Process-Guard Control Aren** es un framework de AI Control que audita artefactos de software (código, skills, requisitos) enviándolos a 3 LLMs distintos en paralelo (Claude, Gemini, GPT-4). Cada modelo evalúa contra rúbricas formales (SWEBOK/ISO 25010), emite un reporte con métrica parcial (0-100), y un sintetizador detecta alucinaciones por discrepancia y emite una calificación cuantificable final.
 
 ---
 

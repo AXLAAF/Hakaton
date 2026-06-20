@@ -28,3 +28,4 @@ Esta rúbrica se aplica a fragmentos de código fuente, instrucciones de sistema
 | **C6** | Fiabilidad (Manejo de Errores)| ISO 25010 § Reliability | 15% | ¿El software previene fallas y maneja las excepciones de manera controlada y descriptiva? |
 | **C7** | Trazabilidad con Requisitos | SWEBOK § Software Requirements | 10% | ¿Se puede trazar la función de este código a un requisito funcional explícito? |
 | **C8** | Portabilidad | ISO 25010 § Portability | 5% | ¿El código depende excesivamente de librerías o entornos específicos no estandarizados? |
+| **C9** | Compatibilidad Nativa SDK (Solo Skills) | Arquitectura de Control | 10% (Extra) | ¿La *Skill* es estructuralmente compatible con el SDK evaluador (límites de tokens, soporte de *function calling*)? |
