@@ -1,7 +1,12 @@
 # Process-Guard Control Arena: Un framework de AI Control para mitigar la "Guerra del Código"
 
-## 1. Resumen
-Con la proliferación de modelos de lenguaje generativos en el desarrollo de software, los programadores construyen herramientas a un ritmo acelerado. Sin embargo, esta práctica (denominada "La Guerra del Código") frecuentemente ignora los procesos formales de la Ingeniería de Software y su ciclo de vida. Esto genera altos volúmenes de deuda técnica, código inseguro y alucinaciones algorítmicas. Este documento propone **Process-Guard Control Arena**, un marco de trabajo de **AI Control** inspirado en *Linux Arena*, que implementa una "Arena de Evaluación" para el desarrollo de software. En este entorno, cualquier artefacto de un proyecto (código, contexto, skills) es auditado simultáneamente por 3 agentes de IA. Las IAs emiten reportes cruzados que se sintetizan en una **calificación cuantificable**, garantizando que el software cumpla con estrictas métricas de calidad antes de avanzar en su ciclo de vida.
+## 1. Resumen (Objetivo General)
+Con la proliferación de modelos de lenguaje generativos en el desarrollo de software, los programadores construyen herramientas a un ritmo acelerado. Sin embargo, esta práctica (denominada "La Guerra del Código") frecuentemente ignora los procesos formales de la Ingeniería de Software y su ciclo de vida. Esto genera altos volúmenes de deuda técnica, código inseguro y alucinaciones algorítmicas. 
+
+Para solucionar esto proponemos **Process-Guard Control Arena**, cuyo objetivo general es ser un *framework* de **AI Control** con las siguientes características:
+1. **Flexibilidad Total:** La herramienta puede recibir cualquier artefacto del proyecto (un archivo de contexto, un documento de requisitos, una *skill* de Cursor, o todo el proyecto de software completo).
+2. **Evaluación de "3 contra 1":** Las IAs no hacen cosas separadas. Las 3 IAs evalúan el **mismo** artefacto simultáneamente basándose en métricas de procesos de ingeniería de software.
+3. **Síntesis y Cuantificación:** El sistema consolida los reportes en un resumen general que exalta las discrepancias y otorga una calificación final cuantificable (un número sólido) para determinar si el artefacto es seguro y usable antes de avanzar en el ciclo de vida.
 
 ## 2. Introducción y Planteamiento del Problema
 Tradicionalmente, los procesos de ingeniería de software (educción de requisitos, validación, pruebas) eran ineludibles. Hoy, un desarrollador confía a ciegas en el código generado por IA. La omisión de estos procesos provoca un aumento significativo de bugs y fallos de seguridad (estimado en un 80% superior en entornos carentes de metodologías formales). 
@@ -17,12 +22,12 @@ Este proyecto toma inspiración de los actuales entornos de investigación y eva
 ## 4. Metodología: "Process-Guard Control Arena"
 La solución es un framework de validación integrado (a través de APIs de modelos). A diferencia de los linters tradicionales, Process-Guard divide la evaluación del proyecto en múltiples **tareas** a lo largo de todo el ciclo de vida del software.
 
-### Arquitectura Multi-Modelo y Flujo de Calificación
-El usuario puede someter a la Arena cualquier **artefacto** (por ejemplo: un archivo de contexto, una skill, un documento de licitación de requisitos, o un proyecto completo). El flujo por cada tarea es el siguiente:
+### Arquitectura Multi-Modelo y El Nuevo Flujo de Evaluación por Tareas
+Process-Guard se define por su arquitectura de "3 contra 1" (3 IAs evaluando 1 solo artefacto y colapsando en 1 calificación). El flujo por cada tarea es el siguiente:
 
-1. **Evaluación Triple Simultánea:** El *mismo* artefacto se envía a 3 modelos de IA distintos (ej. Claude, Gemini, GPT-4) para evitar sesgos individuales.
-2. **Reportes Individuales y Métrica:** Cada IA comprende y analiza el artefacto basándose en procesos de ingeniería de software. Posteriormente, cada IA emite un reporte individual detallado junto con su propia métrica de calidad.
-3. **Síntesis y Cuantificación Final:** El sistema recopila los 3 artefactos de evaluación, identifica discrepancias o alucinaciones ("le pediste que sume dos y sumó tres"), y emite un **resumen consolidado**. Finalmente, Process-Guard otorga una **calificación cuantificable final** al artefacto evaluado.
+1. **Flexibilidad Total del Input:** El usuario sube cualquier artefacto del proyecto (archivo de contexto, documento de requisitos, una *skill*, o el código completo).
+2. **Evaluación Triple Simultánea:** Las 3 IAs (ej. Claude, Gemini, GPT-4) no hacen cosas separadas; evalúan el mismo artefacto simultáneamente. Cada una lo califica basándose en los procesos y métricas del ciclo de vida del software, entregando un reporte y una métrica individual.
+3. **Síntesis y Cuantificación:** Al final, el sintetizador colapsa los 3 reportes individuales en un resumen general que exalta las discrepancias y alucinaciones. Como resultado final, Process-Guard otorga una **calificación cuantificable** (un número sólido de 0 a 100) para determinar si el artefacto es seguro y usable.
 
 ## 5. Resultados Esperados y Prototipo
 Al implementar este prototipo mediante acceso API, se espera demostrar que la revisión cruzada anula las alucinaciones críticas a través de una **evaluación cuantificable**.
