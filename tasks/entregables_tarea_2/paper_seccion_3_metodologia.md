@@ -7,8 +7,8 @@ Process-Guard Control Arena se presenta como un middleware de validación ("sand
 Para evitar la subjetividad inherente en las respuestas de los LLMs, se han diseñado rúbricas estrictas mapeadas a estándares industriales. El framework categoriza los artefactos en cinco tipos principales (A1: Requisitos, A2: Diseño, A3: Skills/Instrucciones, A4: Código, A5: Proyecto Integrado).
 La evaluación de la correctitud, seguridad y mantenibilidad de los artefactos de desarrollo (A3 y A4) se rige basándose en el estándar de calidad **ISO/IEC 25010** en conjunto con el **OWASP Top 10 para LLM Applications** (para mitigar vulnerabilidades como prompt injection o manejo inseguro de estado). Por otro lado, los artefactos de planificación y diseño (A1 y A2) son auditados de acuerdo con el **SWEBOK v3.0**, **ISO/IEC/IEEE 29148** (Ingeniería de Requisitos), **ISO/IEC/IEEE 42010** (Descripción Arquitectónica) y los lineamientos de mitigación de riesgos del **NIST AI RMF** (Risk Management Framework).
 
-## 3.3 Protocolo de Evaluación Multi-Modelo
-El sistema orquesta llamadas asíncronas a las APIs de tres modelos de estado del arte heterogéneos (e.g., Claude 3.5 Sonnet, Gemini 1.5 Pro, GPT-4o).
+## 3.3 Protocolo de Evaluación Multi-Modelo y Orquestación
+El sistema se despliega en un **VPS (Virtual Private Server)**, utilizando **Fastify (Node.js)** como framework principal debido a su alto rendimiento y baja sobrecarga. Para prevenir timeouts HTTP causados por el tiempo de inferencia de las APIs, las llamadas a los modelos de estado del arte (Claude 3.5 Sonnet, Gemini 1.5 Pro, GPT-4o) se gestionan a través de una cola de tareas asíncrona implementada con **BullMQ y Redis**.
 El protocolo de evaluación requiere que la temperatura (`T`) de todos los modelos esté configurada en `0.0` para maximizar el determinismo y la reproducibilidad de la auditoría. El "prompt" evaluador instruye explícitamente a la IA a asumir el rol de auditor certificado, forzando la salida en un formato `JSON` estricto que contiene el desglose de métricas por criterio y una métrica parcial.
 
 ## 3.4 Sintetizador y Detección de Alucinaciones
