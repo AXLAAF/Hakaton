@@ -1,48 +1,40 @@
 # Process-Guard Control Arena: Un framework de AI Control para mitigar la "Guerra del Código"
 
 ## 1. Resumen
-Con la proliferación de modelos de lenguaje generativos en los entornos de desarrollo (IDE) como Cursor o Copilot, los programadores pueden generar código de manera acelerada. Sin embargo, esta práctica ("La Guerra del Código") frecuentemente ignora los procesos formales de la Ingeniería de Software (SWEBOK, ISO), generando altos volúmenes de deuda técnica, vulnerabilidades y alucinaciones. Este documento propone **Process-Guard Control Arena**, un marco de trabajo de **AI Control** inspirado en *Linux Arena*, que implementa una "Arena de Evaluación" local. En este entorno, múltiples agentes de IA actúan de forma cruzada como auditores implacables de código, garantizando que todo el código generado cumpla con los requisitos, métricas de calidad y procesos arquitectónicos antes de ser aprobado.
+Con la proliferación de modelos de lenguaje generativos en el desarrollo de software, los programadores construyen herramientas a un ritmo acelerado. Sin embargo, esta práctica (denominada "La Guerra del Código") frecuentemente ignora los procesos formales de la Ingeniería de Software y su ciclo de vida. Esto genera altos volúmenes de deuda técnica, código inseguro y alucinaciones algorítmicas. Este documento propone **Process-Guard Control Arena**, un marco de trabajo de **AI Control** inspirado en *Linux Arena*, que implementa una "Arena de Evaluación" para el desarrollo de software. En este entorno, cualquier artefacto de un proyecto (código, contexto, skills) es auditado simultáneamente por 3 agentes de IA. Las IAs emiten reportes cruzados que se sintetizan en una **calificación cuantificable**, garantizando que el software cumpla con estrictas métricas de calidad antes de avanzar en su ciclo de vida.
 
 ## 2. Introducción y Planteamiento del Problema
-Actualmente, el paradigma de desarrollo ha cambiado radicalmente. En el pasado, los procesos de ingeniería (como la educción de requisitos, validación, pruebas de regresión y diseño arquitectónico) eran obligatorios. Hoy, un desarrollador inserta un "prompt" y un modelo de inteligencia artificial genera la solución. Si bien esto incrementa la velocidad, destruye el proceso metódico:
-- No existen requisitos trazables.
-- No hay validación de arquitectura.
-- Las IAs sufren de alucinaciones (ej. alteraciones lógicas que el desarrollador da por correctas).
+Tradicionalmente, los procesos de ingeniería de software (educción de requisitos, validación, pruebas) eran ineludibles. Hoy, un desarrollador confía a ciegas en el código generado por IA. La omisión de estos procesos provoca un aumento significativo de bugs y fallos de seguridad (estimado en un 80% superior en entornos carentes de metodologías formales). 
 
-A este fenómeno de producción masiva y caótica lo denominamos **"La Guerra del Código"**. Como consecuencia, observamos que los entregables generados sin un proceso de desarrollo tienen un incremento del 80% en bugs e inseguridades sistémicas. Existe un riesgo crítico en usar IA para crear productos sin un mecanismo de *Control*. No basta con la "Gobernanza" (que establece políticas y regulaciones externas para las compañías); se requiere un mecanismo técnico de **AI Control** para limitar, validar y auditar el comportamiento del modelo directamente en el entorno de desarrollo.
+Existe un riesgo crítico en usar IA para el desarrollo de software público sin mecanismos de verificación. No basta con depender de la "Gobernanza" (establecer reglas para sancionar corporaciones); se requiere un mecanismo técnico y preventivo de **AI Control**. Necesitamos herramientas que auditen, guíen y califiquen cuantitativamente si los artefactos generados son seguros, usables y tienen concordancia con los objetivos del proyecto.
 
 ## 3. Trabajos Relacionados y Marco de Referencia
-El presente trabajo toma fuerte inspiración de entornos de investigación y evaluación de seguridad de IA:
-1. **Linux Arena (Redwood Research):** Un sandbox de control donde los modelos de IA interactúan con sistemas operativos reales, permitiendo a los investigadores evaluar si la IA se mantiene dentro de los límites de seguridad esperados en la ejecución de comandos.
-2. **Control Arena (UK AI Safety Institute):** Entornos rigurosos de evaluación de modelos y agentes bajo presión.
-3. **LMSYS Chatbot Arena:** Sistema de evaluación cruzada y validación en tiempo real.
-4. **SWEBOK / Normas ISO SQA:** Los fundamentos teóricos de calidad de software y verificación que históricamente se utilizaban para medir y asegurar el desarrollo seguro.
+Este proyecto toma inspiración de los actuales entornos de investigación y evaluación de seguridad en IA:
+1. **Linux Arena (Redwood Research) y Control Arena:** Sandboxes donde los modelos interactúan con sistemas reales para evaluar si la IA opera dentro de límites de seguridad sistémicos.
+2. **LMSYS Chatbot Arena:** Sistema de evaluación cruzada y validación de outputs por consenso.
+3. **SWEBOK e ISOs de Software:** Fundamentos teóricos de calidad y ciclo de vida de ingeniería de software, utilizados como la métrica base para las evaluaciones de nuestra herramienta.
 
 ## 4. Metodología: "Process-Guard Control Arena"
-La solución propuesta es el diseño de un framework de control integrable en editores modernos (como Cursor a través de su API). Process-Guard actúa como un middleware de validación, forzando al código generado por IA a ser analizado por otras IAs en una "Arena de Control".
+La solución es un framework de validación integrado (a través de APIs de modelos). A diferencia de los linters tradicionales, Process-Guard divide la evaluación del proyecto en múltiples **tareas** a lo largo de todo el ciclo de vida del software.
 
-### Arquitectura de la Arena
-Se implementa una configuración **multi-modelo** (ej. integrando Claude, Gemini y GPT-4). Para no depender de un solo modelo (y evitar sus sesgos/alucinaciones), la arquitectura delega 3 responsabilidades de control simultáneas a los diferentes modelos.
+### Arquitectura Multi-Modelo y Flujo de Calificación
+El usuario puede someter a la Arena cualquier **artefacto** (por ejemplo: un archivo de contexto, una skill, un documento de licitación de requisitos, o un proyecto completo). El flujo por cada tarea es el siguiente:
 
-**Las 3 Skills de Evaluación (Auditores de la Arena):**
-1. **Control de Requisitos:** Un agente de IA evalúa la especificación del proyecto, buscando ambigüedades, "huecos" lógicos y contrastando que el output del modelo generador coincida con el objetivo inicial de desarrollo.
-2. **Control SQA (Gobernanza Técnica):** Un segundo agente evalúa la arquitectura generada contra los estándares SWEBOK/ISO, identificando deuda técnica, acoplamientos peligrosos y falta de procesos formales.
-3. **Control de Testing:** Un tercer agente revisa la usabilidad, seguridad y diseña pruebas de regresión.
-
-El código se inyecta en la API con el contexto de las skills y los estándares. Los modelos ejecutan sus evaluaciones y, finalmente, se consolida una matriz de veredictos cruzados.
+1. **Evaluación Triple Simultánea:** El *mismo* artefacto se envía a 3 modelos de IA distintos (ej. Claude, Gemini, GPT-4) para evitar sesgos individuales.
+2. **Reportes Individuales y Métrica:** Cada IA comprende y analiza el artefacto basándose en procesos de ingeniería de software. Posteriormente, cada IA emite un reporte individual detallado junto con su propia métrica de calidad.
+3. **Síntesis y Cuantificación Final:** El sistema recopila los 3 artefactos de evaluación, identifica discrepancias o alucinaciones ("le pediste que sume dos y sumó tres"), y emite un **resumen consolidado**. Finalmente, Process-Guard otorga una **calificación cuantificable final** al artefacto evaluado.
 
 ## 5. Resultados Esperados y Prototipo
-Al implementar este prototipo de "Arena", se espera demostrar que la evaluación cruzada automatizada reduce significativamente la introducción de deuda técnica en proyectos de desarrollo asistido. 
-El flujo propuesto en `flujo_sqa_ia.md` genera reportes (ej. `requisitos_modelo1.md`, `sqa_modelo2.md`) que exponen las discrepancias. Si un modelo generó una alucinación (ej. una suma incorrecta), la matriz de resultados de la Arena identificará el fallo por falta de concordancia con la base de requisitos.
+Al implementar este prototipo mediante acceso API, se espera demostrar que la revisión cruzada anula las alucinaciones críticas. Por ejemplo, si se evalúa una "skill" de desarrollo, las tres IAs darán su veredicto. Si un modelo asume erróneamente que la skill es segura, los otros dos la rechazarán apoyándose en fundamentos del SWEBOK. El resumen resultante advertirá al usuario y entregará una calificación baja, deteniendo la propagación del error.
 
 ## 6. Discusión
-Este enfoque transiciona la carga de la "Gobernanza" (política y burocrática) al **"AI Control"** técnico. En lugar de educar exhaustivamente a todos los desarrolladores junior del mundo sobre ingeniería de software, se les dota de un entorno (Arena) que audita implacablemente los entregables de IA. Esto sienta las bases para un desarrollo asistido verdaderamente escalable y seguro.
+Este enfoque transiciona la carga desde la "Gobernanza" corporativa/política hacia el **"AI Control"** técnico. En una industria emergente donde falta formación en ingeniería formal, es insostenible educar a cada desarrollador sobre todos los procesos existentes. En cambio, dotarlos de un verificador (Arena) que califique cuantitativamente sus proyectos establece un estándar de seguridad implacable y escalable.
 
 ## 7. Limitaciones y Riesgos de Doble Uso
-* **Limitaciones:** El sistema depende del acceso a modelos avanzados y variados mediante APIs, lo cual introduce fricciones de costos y latencia en tiempo de desarrollo. Además, el consenso entre modelos no es una garantía matemática de correctness.
-* **Doble Uso:** Entornos de evaluación automatizados pueden ser utilizados por actores maliciosos de manera invertida, es decir, para optimizar ataques iterativos ("jailbreaks") evaluando cómo un sistema de seguridad detecta código malicioso, logrando así generar malware indetectable.
+* **Limitaciones:** El sistema introduce latencia y costos al requerir tres inferencias paralelas de LLMs avanzados por cada artefacto. Adicionalmente, el consenso entre modelos no ofrece garantías de correctitud matemática formal.
+* **Doble Uso:** Entornos de evaluación automatizados ("Arenas") podrían ser empleados por actores maliciosos de manera inversa: automatizando la creación de malware y mutándolo iterativamente hasta lograr que la Arena le asigne una calificación de "seguro", logrando así evadir detectores de vulnerabilidades.
 
 ## 8. Referencias
-* Redwood Research (Linux Arena)
+* Redwood Research (Linux Arena - AI Control Framework)
 * SWEBOK v3.0 (Software Engineering Body of Knowledge)
-* UK AI Safety Institute (Evaluación de Control de Agentes de IA)
+* Control Arena y LMSYS Chatbot Arena
