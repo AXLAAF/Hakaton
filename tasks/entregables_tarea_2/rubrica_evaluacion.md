@@ -15,7 +15,20 @@ Esta rúbrica se aplica a especificaciones de software, historias de usuario, o 
 
 ---
 
-## 2. Evaluación de Código y Skills (Artefactos Tipo A3 y A4)
+## 2. Evaluación de Diseño de Arquitectura (Artefacto Tipo A2)
+Esta rúbrica se aplica a diagramas de flujo, documentos UML, descripciones arquitectónicas y registros de decisiones técnicas (ADRs).
+
+| ID | Criterio | Fuente Normativa | Peso | Descripción para el Auditor (Prompt) |
+|----|----------|------------------|------|---------------------------------------|
+| **C1** | Cohesión y Acoplamiento | SWEBOK § Software Design | 25% | ¿El diseño promueve alta cohesión dentro de los módulos y bajo acoplamiento entre ellos? |
+| **C2** | Seguridad por Diseño | SWEBOK § Software Security | 25% | ¿Se identifican superficies de ataque y se aplican principios de mínimo privilegio y defensa en profundidad? |
+| **C3** | Eficiencia y Escalabilidad | ISO 25010 § Performance Efficiency | 20% | ¿El diseño contempla un manejo adecuado de recursos y soporta crecimiento sin deterioro estructural? |
+| **C4** | Trazabilidad hacia Requisitos | SWEBOK § Software Design | 15% | ¿Todas las decisiones de diseño pueden ser directamente justificadas y vinculadas a un requerimiento funcional (A1)? |
+| **C5** | Patrones y Estandarización | SWEBOK § Software Design | 15% | ¿Se utilizan patrones de diseño y arquitectónicos reconocidos, justificando su elección frente a alternativas? |
+
+---
+
+## 3. Evaluación de Código y Skills (Artefactos Tipo A3 y A4)
 Esta rúbrica se aplica a fragmentos de código fuente, instrucciones de sistema (skills) y módulos arquitectónicos listos para integración.
 
 | ID | Criterio | Fuente Normativa | Peso | Descripción para el Auditor (Prompt) |
