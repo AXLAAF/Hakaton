@@ -1,6 +1,4 @@
 # TAREA 1 — Investigación y Marco Teórico
-**Responsable:** Integrante 1  
-**Entrega interna:** Sábado 20 de junio, mediodía  
 **Secciones del paper:** Abstract (borrador), Sección 1 (Introduction), Sección 2 (Related Work), Referencias
 
 ---
