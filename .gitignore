@@ -1,6 +1,3 @@
-# Nested clone metadata (template was cloned, not submoduled)
-global-south-ais-template/.git/
-
 # Python
 __pycache__/
 *.py[cod]
