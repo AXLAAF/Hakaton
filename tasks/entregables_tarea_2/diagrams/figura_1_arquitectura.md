@@ -2,7 +2,7 @@
 
 ```mermaid
 graph TD
-    U[Usuario / CI-CD Pipeline] -->|Sube 1 Solo Artefacto\n(Contexto, Requisitos, Skill, Proyecto)| VPS[VPS Reverse Proxy\nNginx / Caddy]
+    U[Usuario / CI-CD Pipeline] -->|Sube 1 Solo Artefacto\n(Requisitos, Diseño, Código, Skill)| VPS[VPS Reverse Proxy\nNginx / Caddy]
     VPS --> API[Process-Guard API\nFastify + Node.js]
     API --> ORCH[Orquestador de Tareas\nBullMQ + Redis]
     
@@ -12,12 +12,10 @@ graph TD
     OR_PROXY -->|Evalúa el MISMO artefacto| M2[IA 2: Gemini 1.5 Pro]
     OR_PROXY -->|Evalúa el MISMO artefacto| M3[IA 3: GPT-4o]
     
-    M1 -->|Reporte Individual + Métrica| SYNTH[Sintetizador\nDetección de Discrepancias]
-    M2 -->|Reporte Individual + Métrica| SYNTH
-    M3 -->|Reporte Individual + Métrica| SYNTH
+    M1 -->|Reporte Individual + Gates + Métrica| SYNTH[Sintetizador de Dos Fases\nEvaluación de Gates y Consenso]
+    M2 -->|Reporte Individual + Gates + Métrica| SYNTH
+    M3 -->|Reporte Individual + Gates + Métrica| SYNTH
     
-    SYNTH --> DB[(Almacenamiento\nPostgreSQL)]
-    SYNTH --> CF[1 Calificación Cuantificable\nNúmero Sólido 0-100]
-    
-    CF --> OUT[Resumen Consolidado de las 3 IAs\nJSON / Markdown]
+    SYNTH -->|Fase 1: Gates de Veto\nFase 2: Consenso y N/E| DB[(Almacenamiento\nPostgreSQL)]
+    SYNTH --> OUT[Veredicto Consolidado de las 3 IAs\n(APROBADO, APROBADO_CON_OBS, REPROBADO, INCONCLUSO)]
 ```

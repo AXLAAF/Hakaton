@@ -12,7 +12,7 @@ graph LR
     subgraph Sistema[Process-Guard Control Arena]
         UC1((UC-01: Registrar y<br>Encolar Artefacto))
         UC2((UC-02: Auditar Artefacto<br>Paralelamente))
-        UC3((UC-03: Sintetizar y<br>Detectar Alucinaciones))
+        UC3((UC-03: Sintetizar, Evaluar<br>Gates y Consenso))
         UC4((UC-04: Consultar Reporte<br>y Aprobación))
         UC5((UC-05: Modificar Umbrales<br>y Rúbricas))
     end
@@ -31,7 +31,7 @@ graph LR
 
     %% Relaciones internas
     UC1 -.->|Encola trabajo Redis| UC2
-    UC2 -.->|Incluye análisis estadístico| UC3
+    UC2 -.->|Incluye evaluación de gates y consenso| UC3
 
     %% Relaciones de actores de soporte/admin
     UC2 -->|Inferencia T=0.0 Claude/Gemini/GPT| OR

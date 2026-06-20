@@ -8,7 +8,7 @@ Este documento define la especificación formal de los casos de uso del framewor
 
 ## 1. Identificación de Actores
 
-* **Desarrollador de Software (Actor Primario - Humano):** Ingeniero que genera y modifica artefactos de software (requisitos, arquitectura, skills, código) y requiere una validación objetiva para avanzar en el ciclo de vida (SDLC).
+* **Desarrollador de Software (Actor Primario - Humano):** Ingeniero que genera y modifica artefactos de software (requisitos, arquitectura, código, skills) y requiere una validación objetiva para avanzar en el ciclo de vida (SDLC).
 * **Pipeline de CI/CD (Actor Primario - Sistema):** Sistema automatizado de integración y despliegue continuo que invoca al framework para validar commits y ramas de código de forma programática.
 * **Orquestador BullMQ (Actor Secundario / de Sistema):** Componente middleware asíncrono que administra la cola de evaluaciones y coordina la distribución paralela de trabajos.
 * **OpenRouter Gateway (Actor de Soporte - Servicio Externo):** API unificada que encapsula la comunicación con los proveedores de LLMs heterogéneos (Anthropic, Google, OpenAI).
@@ -28,8 +28,8 @@ actor "Administrador" as Admin
 rectangle "Process-Guard Control Arena" {
   usecase "UC-01: Registrar y Encolar Artefacto" as UC1
   usecase "UC-02: Auditar Artefacto Paralelamente" as UC2
-  usecase "UC-03: Sintetizar y Detectar Alucinaciones" as UC3
-  usecase "UC-04: Consultar Reporte de Seguridad" as UC4
+  usecase "UC-03: Sintetizar, Evaluar Gates y Consenso" as UC3
+  usecase "UC-04: Consultar Reporte y Aprobación" as UC4
   usecase "UC-05: Modificar Umbrales y Rúbricas" as UC5
 }
 
@@ -48,14 +48,14 @@ Admin --> UC5
 ### UC-01: Registrar y Encolar Artefacto para Evaluación
 * **ID / Nombre:** UC-01 / Registrar y Encolar Artefacto para Evaluación.
 * **Actor Primario:** Desarrollador de Software o Pipeline de CI/CD.
-* **Descripción:** Permite a un cliente subir un artefacto de software (de tipo A1 a A5) para someterlo al protocolo de auditoría multi-modelo de Process-Guard de manera asíncrona.
+* **Descripción:** Permite a un cliente subir un artefacto de software (de tipo A1 a A4) para someterlo al protocolo de auditoría multi-modelo de Process-Guard de manera asíncrona.
 * **Precondiciones:**
   1. El cliente está autenticado mediante un token de API válido en la plataforma.
   2. El artefacto cumple con los formatos de entrada permitidos (Markdown, JSON, o archivos de código plano).
 * **Flujo Principal (Escenario Exitoso):**
   1. El cliente realiza una petición HTTP `POST` a `/api/v1/evaluaciones` enviando:
      - El contenido del artefacto o archivo.
-     - El tipo de artefacto (`A1`, `A2`, `A3`, `A4` o `A5`).
+     - El tipo de artefacto (`A1`, `A2`, `A3` o `A4`).
      - (Opcional) La terna de modelos de evaluación deseados (por defecto: Claude 3.5 Sonnet, Gemini 1.5 Pro, GPT-4o).
   2. El sistema valida la estructura del payload y la firma del token.
   3. El sistema identifica el tipo de rúbrica correspondiente al tipo de artefacto (según `rubrica_evaluacion.md`).
@@ -64,7 +64,7 @@ Admin --> UC5
   6. El sistema devuelve al cliente un código de estado `202 Accepted` y un `task_id` único para rastreo.
 * **Flujos Alternativos:**
   * **Alt 1a: Tipo de Artefacto Inválido:**
-    1. En el paso 2, el sistema detecta un tipo de artefacto no registrado (ej. `A6`).
+    1. En el paso 2, el sistema detecta un tipo de artefacto no registrado (ej. `A5`).
     2. El sistema cancela el registro, genera un log de error y responde con `400 Bad Request` indicando la falla de validación.
   * **Alt 1b: Falla de Conexión de Redis:**
     1. En el paso 5, la cola de tareas no responde por fallas de conexión o desbordamiento de memoria.
@@ -87,7 +87,7 @@ Admin --> UC5
   3. El sistema inyecta la rúbrica y las reglas de salida en un *System Prompt* estricto de auditoría (forzando formato JSON).
   4. El orquestador inicia 3 peticiones HTTP asíncronas en paralelo hacia la API de OpenRouter, parametrizando `temperature = 0.0` para cada modelo de la terna.
   5. OpenRouter procesa la inferencia en los respectivos proveedores (Anthropic, Google, OpenAI).
-  6. El sistema recibe las 3 respuestas en formato JSON, conteniendo las puntuaciones detalladas por criterio y una métrica parcial ($s_1, s_2, s_3$).
+  6. El sistema recibe las 3 respuestas en formato JSON, conteniendo la evaluación de los gates, las puntuaciones detalladas por criterio y una métrica parcial ($s_1, s_2, s_3$).
   7. El sistema valida que los JSON recibidos contengan la estructura métrica requerida.
   8. Se invoca automáticamente al sintetizador (UC-03).
 * **Flujos Alternativos:**
@@ -103,30 +103,37 @@ Admin --> UC5
 
 ---
 
-### UC-03: Sintetizar y Detectar Alucinaciones
-* **ID / Nombre:** UC-03 / Sintetizar y Detectar Alucinaciones.
+### UC-03: Sintetizar, Evaluar Gates y Consenso
+* **ID / Nombre:** UC-03 / Sintetizar, Evaluar Gates y Consenso.
 * **Actor Primario:** Orquestador (Sistema).
-* **Descripción:** Procesa estadísticamente las métricas parciales provistas por los evaluadores para detectar anomalías de consenso y alucinaciones, aplicando las ecuaciones matemáticas de penalización correspondientes.
-* **Precondiciones:** Se cuenta con las 3 calificaciones parciales válidas ($s_1, s_2, s_3$) y desgloses de criterios de UC-02.
-* **Flujo Principal (Escenario Exitoso - Consenso Alto):**
-  1. El sistema calcula el promedio de las puntuaciones:
+* **Descripción:** Procesa en primera instancia los criterios de veto (Gates). Si son aprobados, calcula consensos, maneja criterios no evaluados (`N/E`) y determina el veredicto final.
+* **Precondiciones:** Se cuenta con las 3 evaluaciones válidas individuales de UC-02.
+* **Flujo Principal (Escenario Exitoso - Todos los Gates Pasan y Consenso Alto):**
+  1. El sistema evalúa los resultados de los `Gates` en los 3 modelos. Verifica que todos sean `CUMPLE`.
+  2. El sistema calcula el promedio de las puntuaciones compensatorias:
      $$ CF = \frac{s_1 + s_2 + s_3}{3} $$
-  2. El sistema calcula la desviación estándar ($\sigma$) del conjunto de puntuaciones.
-  3. El sistema valida que $\sigma < 10$.
-  4. El sistema almacena la Calificación Final ($CF$) y marca el estado de la evaluación como `SUCCESS` con etiqueta `Alto Consenso`.
-  5. El sistema consolida la justificación cualitativa concatenando los comentarios y argumentos de los tres modelos en un reporte unificado.
+  3. El sistema calcula la desviación estándar ($\sigma$) del conjunto de puntuaciones.
+  4. El sistema valida que $\sigma < 10$.
+  5. El sistema asigna el veredicto en base a la $CF$ (Aprobado si $CF \ge 85$).
+  6. El sistema almacena el veredicto final (`APROBADO`) y marca el estado de la evaluación como `SUCCESS`.
+  7. El sistema consolida la justificación cualitativa concatenando la evidencia y argumentos de los tres modelos en un reporte unificado.
 * **Flujos Alternativos:**
-  * **Alt 3a: Desviación Estándar Crítica (Detección de Alucinación - $\sigma > 20$):**
-    1. En el paso 3, el sistema detecta que la desviación estándar es mayor a 20 ($\sigma > 20$).
+  * **Alt 3a: Falla de un Gate (Criterio de Veto):**
+    1. En el paso 1, el sistema detecta que al menos un gate resultó en `NO_CUMPLE` en alguna de las evaluaciones.
+    2. El sistema detiene inmediatamente el proceso, cancela el cálculo de la Calificación Final ($CF$).
+    3. El sistema emite directamente el veredicto **REPROBADO**, identificando el gate que falló y la justificación y evidencia aportada por el modelo.
+    4. El estado se marca como `SUCCESS` con el veredicto definitivo de `REPROBADO`.
+  * **Alt 3b: Desviación Estándar Crítica (Detección de Alucinación - $\sigma > 20$):**
+    1. En el paso 4, el sistema detecta que la desviación estándar es mayor a 20 ($\sigma > 20$).
     2. El sistema identifica el valor "outlier" como aquel que tiene la mayor distancia absoluta respecto a la mediana del conjunto.
     3. El sistema recalcula la calificación final aplicando la fórmula penalizada:
        $$ CF_{discrepancia} = (0.45 \times s_{consenso1}) + (0.45 \times s_{consenso2}) + (0.1 \times s_{outlier}) $$
-    4. El sistema almacena la $CF$ recalculada y marca la tarea como `SUCCESS` con etiquetas `Discrepancia Crítica` y `Alucinación Detectada`, señalando cuál modelo fue penalizado y por qué criterio específico de la rúbrica (ej. ISO 25010 o OWASP).
-  * **Alt 3b: Desviación Estándar Moderada ($10 \le \sigma \le 20$):**
-    1. En el paso 3, el sistema detecta que la desviación estándar está en el rango de advertencia.
-    2. El sistema calcula la $CF$ como el promedio directo de las tres puntuaciones.
-    3. El sistema marca el reporte final con una etiqueta de advertencia (`Flag: Revisión Manual Recomendada`) debido a opiniones divergentes leves.
-* **Postcondiciones:** La Calificación Final y las etiquetas de consenso son guardadas en la base de datos PostgreSQL, y el trabajo del worker se marca como completado.
+    4. El sistema almacena la $CF$ recalculada y marca la tarea como `SUCCESS` con etiquetas de alucinación detectada, registrando el veredicto basado en la $CF$ recalculada.
+  * **Alt 3c: Criterios No Evaluables e Inconclusos (`N/E`):**
+    1. El sistema detecta que uno o más criterios compensatorios se marcaron como `N/E`.
+    2. El sistema redistribuye el peso de los criterios `N/E` de forma proporcional entre los criterios activos.
+    3. Si el peso total evaluado es menor al 60% (`peso_evaluado_pct < 60`), el sistema aborta el cálculo de veredicto automatizado y marca el reporte como **INCONCLUSO**, enviándolo a revisión humana.
+* **Postcondiciones:** El veredicto final y el reporte consolidados son persistidos en la base de datos, y el trabajo en cola se da por finalizado de forma exitosa.
 
 ---
 
@@ -138,15 +145,18 @@ Admin --> UC5
   1. Existe un `task_id` generado previamente en UC-01.
 * **Flujo Principal (Escenario Exitoso):**
   1. El cliente envía una petición HTTP `GET` a `/api/v1/evaluaciones/{task_id}`.
-  2. El sistema valida el `task_id` y verifica que el token del cliente tenga permisos de lectura sobre dicho recurso.
-  3. El sistema extrae de la base de datos el reporte detallado: estado (`PENDING`, `PROCESSING`, `SUCCESS`, `FAILED`), calificación final ($CF$), marcas de alucinación/desviación, y las métricas detalladas por estándar (ISO 25010, OWASP, ISO 29148, etc.).
+  2. El sistema valida el `task_id` y verifica que el token del cliente tenga permisos de lectura.
+  3. El sistema extrae el reporte detallado: estado, veredicto final (`APROBADO`, `APROBADO_CON_OBSERVACIONES`, `REPROBADO`, `INCONCLUSO`), calificación final ($CF$), marcas de alucinación y evidencia.
   4. El sistema devuelve un código `200 OK` con un payload JSON estructurado.
-  5. *Acción del Cliente (CI/CD):* Si la evaluación finaliza en `SUCCESS` y la $CF \ge 80$ (umbral del pipeline), el pipeline continúa con la integración del código o diseño.
+  5. *Acción del Cliente (CI/CD):* Si el veredicto es `APROBADO`, el pipeline continúa con la integración del código o diseño de forma transparente.
 * **Flujos Alternativos:**
   * **Alt 4a: Tarea en Proceso:**
     1. En el paso 3, el sistema verifica que el estado de la tarea es `PENDING` o `PROCESSING`.
-    2. El sistema responde con `200 OK` enviando el estado actual y un tiempo estimado de finalización basado en la posición en la cola BullMQ, sin incluir calificaciones parciales aún.
-  * **Alt 4b: Rechazo por Calificación Insuficiente (Aprobación denegada):**
-    1. En el paso 5, el pipeline analiza el JSON y lee una $CF < 80$.
-    2. El pipeline aborta automáticamente la compilación o merge de la rama, notificando en el chat del equipo o en el PR (Pull Request) del desarrollador el reporte Markdown con las fallas indicadas por las IAs auditoras.
-* **Postcondiciones:** El cliente obtiene la trazabilidad exacta de por qué el artefacto fue aprobado o rechazado, mapeado a los estándares de ingeniería de software.
+    2. El sistema responde con `200 OK` enviando el estado actual y un tiempo estimado, sin calificaciones parciales.
+  * **Alt 4b: Aprobación con Observaciones:**
+    1. En el paso 5, el pipeline lee el veredicto `APROBADO_CON_OBSERVACIONES` (score 70-84).
+    2. El pipeline permite continuar pero registra advertencias en la bitácora e inyecta las tareas de corrección obligatorias en el backlog del equipo de desarrollo.
+  * **Alt 4c: Rechazo por Reprobación o Inconcluso:**
+    1. En el paso 5, el pipeline lee el veredicto `REPROBADO` o `INCONCLUSO`.
+    2. El pipeline aborta automáticamente la compilación o merge de la rama, bloqueando el avance en el ciclo de vida y notificando el reporte de fallas de seguridad/gates en el pull request.
+* **Postcondiciones:** El cliente obtiene la trazabilidad exacta de la evaluación mapeada a los estándares de ingeniería de software.
