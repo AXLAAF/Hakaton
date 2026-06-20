@@ -1,0 +1,136 @@
+{
+  "dry_run": true,
+  "warning": "DATOS FICTICIOS. No usar como resultados reales en el paper sin marcarlo como simulacion. Generados para validar el pipeline de figuras y tablas antes de tener el prototipo (Tarea 4).",
+  "generated_for": "Tarea 3 - validacion de pipeline",
+  "experiments": [
+    {
+      "experiment_id": "1A",
+      "label": "Skill gold standard",
+      "artifact_file": "1A_gold_standard.txt",
+      "artifact_type": "skill",
+      "run": 1,
+      "reports": [
+        {"model_name": "Claude", "partial_score": 88, "critical_risks": []},
+        {"model_name": "Gemini", "partial_score": 86, "critical_risks": []},
+        {"model_name": "GPT-4o", "partial_score": 87, "critical_risks": []}
+      ],
+      "synthesis": {
+        "mean_score": 87.0, "std_deviation": 1.0, "median_score": 87.0,
+        "outlier_model": null, "hallucination_flag": false,
+        "final_score": 87, "status": "approved_observations",
+        "consensus_risks": [], "discrepancies": []
+      }
+    },
+    {
+      "experiment_id": "1B",
+      "label": "Skill vulnerable",
+      "artifact_file": "1B_vulnerable.txt",
+      "artifact_type": "skill",
+      "run": 1,
+      "reports": [
+        {"model_name": "Claude", "partial_score": 42, "critical_risks": ["SQL injection via string concatenation", "No authentication on endpoint", "Plaintext password storage"]},
+        {"model_name": "Gemini", "partial_score": 38, "critical_risks": ["SQL injection", "Password logged in plaintext", "No input validation"]},
+        {"model_name": "GPT-4o", "partial_score": 45, "critical_risks": ["SQL injection", "Sensitive data returned in response", "No rate limiting"]}
+      ],
+      "synthesis": {
+        "mean_score": 41.67, "std_deviation": 3.51, "median_score": 42.0,
+        "outlier_model": null, "hallucination_flag": false,
+        "final_score": 42, "status": "rejected",
+        "consensus_risks": ["SQL injection via string concatenation"],
+        "discrepancies": ["No rate limiting", "Sensitive data returned in response"]
+      }
+    },
+    {
+      "experiment_id": "2C",
+      "label": "Skill ambigua (alucinacion)",
+      "artifact_file": "2C_ambiguo.txt",
+      "artifact_type": "skill",
+      "run": 1,
+      "reports": [
+        {"model_name": "Claude", "partial_score": 88, "critical_risks": []},
+        {"model_name": "Gemini", "partial_score": 52, "critical_risks": ["No token expiration specified", "Sanitization not guaranteed by ORM", "No rate limiting"]},
+        {"model_name": "GPT-4o", "partial_score": 54, "critical_risks": ["JWT secret management unspecified", "No expired-token handling", "Sanitization unclear"]}
+      ],
+      "synthesis": {
+        "mean_score": 64.67, "std_deviation": 20.23, "median_score": 54.0,
+        "outlier_model": "Claude", "hallucination_flag": true,
+        "final_score": 56, "status": "needs_review",
+        "consensus_risks": ["Sanitization not guaranteed by ORM"],
+        "discrepancies": ["No token expiration specified", "JWT secret management unspecified"]
+      }
+    },
+    {
+      "experiment_id": "3D",
+      "label": "Reproducibilidad run 1",
+      "artifact_file": "3D_reproducibilidad.txt",
+      "artifact_type": "skill",
+      "run": 1,
+      "reports": [
+        {"model_name": "Claude", "partial_score": 88, "critical_risks": []},
+        {"model_name": "Gemini", "partial_score": 86, "critical_risks": []},
+        {"model_name": "GPT-4o", "partial_score": 87, "critical_risks": []}
+      ],
+      "synthesis": {
+        "mean_score": 87.0, "std_deviation": 1.0, "median_score": 87.0,
+        "outlier_model": null, "hallucination_flag": false,
+        "final_score": 87, "status": "approved_observations",
+        "consensus_risks": [], "discrepancies": []
+      }
+    },
+    {
+      "experiment_id": "3D",
+      "label": "Reproducibilidad run 2",
+      "artifact_file": "3D_reproducibilidad.txt",
+      "artifact_type": "skill",
+      "run": 2,
+      "reports": [
+        {"model_name": "Claude", "partial_score": 87, "critical_risks": []},
+        {"model_name": "Gemini", "partial_score": 86, "critical_risks": []},
+        {"model_name": "GPT-4o", "partial_score": 88, "critical_risks": []}
+      ],
+      "synthesis": {
+        "mean_score": 87.0, "std_deviation": 1.0, "median_score": 87.0,
+        "outlier_model": null, "hallucination_flag": false,
+        "final_score": 87, "status": "approved_observations",
+        "consensus_risks": [], "discrepancies": []
+      }
+    },
+    {
+      "experiment_id": "3D",
+      "label": "Reproducibilidad run 3",
+      "artifact_file": "3D_reproducibilidad.txt",
+      "artifact_type": "skill",
+      "run": 3,
+      "reports": [
+        {"model_name": "Claude", "partial_score": 88, "critical_risks": []},
+        {"model_name": "Gemini", "partial_score": 85, "critical_risks": []},
+        {"model_name": "GPT-4o", "partial_score": 87, "critical_risks": []}
+      ],
+      "synthesis": {
+        "mean_score": 86.67, "std_deviation": 1.53, "median_score": 87.0,
+        "outlier_model": null, "hallucination_flag": false,
+        "final_score": 87, "status": "approved_observations",
+        "consensus_risks": [], "discrepancies": []
+      }
+    },
+    {
+      "experiment_id": "4E",
+      "label": "Documento de requisitos PG",
+      "artifact_file": "4E_requisitos.txt",
+      "artifact_type": "requirements",
+      "run": 1,
+      "reports": [
+        {"model_name": "Claude", "partial_score": 74, "critical_risks": ["No measurable acceptance criteria", "Non-functional requirements missing"]},
+        {"model_name": "Gemini", "partial_score": 71, "critical_risks": ["Metrics lack thresholds", "No traceability matrix"]},
+        {"model_name": "GPT-4o", "partial_score": 76, "critical_risks": ["Vague quality metrics", "No stakeholder roles defined"]}
+      ],
+      "synthesis": {
+        "mean_score": 73.67, "std_deviation": 2.52, "median_score": 74.0,
+        "outlier_model": null, "hallucination_flag": false,
+        "final_score": 74, "status": "approved_observations",
+        "consensus_risks": ["Quality metrics lack measurable thresholds"],
+        "discrepancies": ["No traceability matrix", "No stakeholder roles defined"]
+      }
+    }
+  ]
+}
