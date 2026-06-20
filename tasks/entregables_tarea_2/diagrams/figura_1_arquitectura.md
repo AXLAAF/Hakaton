@@ -1,3 +1,6 @@
+# Figura 1: Arquitectura de Evaluación de Process-Guard
+
+```mermaid
 graph TD
     U[Usuario / CI-CD Pipeline] -->|Sube artefacto| API[Process-Guard API\nFastAPI]
     API --> ORCH[Orquestador Asíncrono\nasyncio.gather]
@@ -15,3 +18,4 @@ graph TD
     
     CF --> OUT[Output al usuario\nJSON / Markdown / PDF]
     REPORT --> OUT
+```
