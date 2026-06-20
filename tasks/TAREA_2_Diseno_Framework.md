@@ -107,13 +107,22 @@ La metodología está finalizada y redactada en `tasks/entregables_tarea_2/paper
 
 ---
 
+### 2.6 Especificación de Casos de Uso (Estándar ISO/IEC/IEEE 29148 y UML 2.5.1)
+
+Se diseñó el flujo de interacciones del framework utilizando casos de uso formales basados en el estándar ISO/IEC/IEEE 29148 y diagramación UML 2.5.1, detallando actores primarios, secundarios, precondiciones, postcondiciones y flujos excepcionales de alucinación/desviación de consenso. 
+El documento detallado está en `tasks/entregables_tarea_2/especificacion_casos_uso.md` y su diagrama correspondiente en `tasks/entregables_tarea_2/diagrams/figura_3_casos_uso.md`.
+
+---
+
 ## Formato de Entrega (Finalizado)
 
 Entregables ubicados en `tasks/entregables_tarea_2/`:
 1. [x] `paper_seccion_3_metodologia.md` — Sección 3 redactada.
 2. [x] `rubrica_evaluacion.md` — Tablas de criterios por tipo de artefacto (A1 a A4).
-3. [x] `diagrams/figura_1_arquitectura.md` — Diagrama de arquitectura en formato Obsidian.
-4. [x] `diagrams/figura_2_ciclo_vida.md` — Diagrama de ciclo de vida en formato Obsidian.
+3. [x] `especificacion_casos_uso.md` — Especificación formal de casos de uso (ISO 29148).
+4. [x] `diagrams/figura_1_arquitectura.md` — Diagrama de arquitectura en formato Obsidian.
+5. [x] `diagrams/figura_2_ciclo_vida.md` — Diagrama de ciclo de vida en formato Obsidian.
+6. [x] `diagrams/figura_3_casos_uso.md` — Diagrama de casos de uso UML en formato Obsidian.
 
 ---
 
@@ -125,3 +134,5 @@ Entregables ubicados en `tasks/entregables_tarea_2/`:
 - [x] El mecanismo de detección de alucinaciones está claramente descrito
 - [x] Las decisiones de diseño están justificadas con razonamiento
 - [x] Hay al menos 1 figura de arquitectura en el paper
+- [x] Los casos de uso de diseño y su flujo operativo están definidos bajo un estándar internacional (ISO/IEC/IEEE 29148 / UML)
+
