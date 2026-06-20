@@ -1,0 +1,16 @@
+# Nested clone metadata (template was cloned, not submoduled)
+global-south-ais-template/.git/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Experiment outputs
+experimentos/salida/*.png
+experimentos/salida/*.pdf
