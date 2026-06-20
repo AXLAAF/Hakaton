@@ -1,0 +1,9 @@
+graph LR
+    REQ[Requisitos\nA1] -->|Evalúa| PG1[Process-Guard\nRonda 1]
+    PG1 -->|CF ≥ 70| DES[Diseño\nA2]
+    PG1 -->|CF < 70| REQ
+    DES -->|Evalúa| PG2[Process-Guard\nRonda 2]
+    PG2 -->|CF ≥ 70| COD[Código / Skills\nA3-A4]
+    COD -->|Evalúa| PG3[Process-Guard\nRonda 3]
+    PG3 -->|CF ≥ 90| PROD[Producción]
+    PG3 -->|CF < 90| COD
