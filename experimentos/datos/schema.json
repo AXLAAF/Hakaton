@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Process-Guard /evaluate contract",
+  "description": "Contrato esperado entre run_experiments.py (Tarea 3) y el endpoint POST /evaluate (Tarea 4). Coordinar con T4: si el response real difiere, adaptar el parser en run_experiments.py.",
+  "definitions": {
+    "EvaluationRequest": {
+      "type": "object",
+      "required": ["artifact_content", "artifact_type"],
+      "properties": {
+        "artifact_content": { "type": "string" },
+        "artifact_type": {
+          "type": "string",
+          "enum": ["requirements", "design", "skill", "code", "project"]
+        }
+      }
+    },
+    "ModelReport": {
+      "type": "object",
+      "required": ["model_name", "partial_score"],
+      "properties": {
+        "model_name": { "type": "string" },
+        "partial_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "critical_risks": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "summary": { "type": "string" }
+      }
+    },
+    "SynthesisResult": {
+      "type": "object",
+      "required": ["mean_score", "std_deviation", "final_score", "status"],
+      "properties": {
+        "mean_score": { "type": "number" },
+        "std_deviation": { "type": "number" },
+        "outlier_model": { "type": ["string", "null"] },
+        "hallucination_flag": { "type": "boolean" },
+        "final_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "status": {
+          "type": "string",
+          "enum": ["approved", "approved_observations", "needs_review", "rejected"]
+        },
+        "consensus_risks": { "type": "array", "items": { "type": "string" } },
+        "discrepancies": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "EvaluationResponse": {
+      "type": "object",
+      "required": ["reports", "synthesis"],
+      "properties": {
+        "reports": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ModelReport" }
+        },
+        "synthesis": { "$ref": "#/definitions/SynthesisResult" }
+      }
+    }
+  }
+}

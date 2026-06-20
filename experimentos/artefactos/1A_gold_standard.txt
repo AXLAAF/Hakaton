@@ -1,0 +1,66 @@
+Skill: Secure User Registration Endpoint
+Artifact type: skill
+Target: POST /api/v1/users
+
+PURPOSE
+Create a new user account from a JSON payload. This skill defines the
+system instruction for an LLM-backed code assistant that must generate or
+review the implementation of this endpoint following SWEBOK and ISO/IEC
+25010 quality attributes.
+
+INPUT CONTRACT
+- Content-Type: application/json
+- Body fields:
+  - email (string, required): RFC 5322 format, max 254 chars.
+  - password (string, required): min 12 chars, must include upper, lower,
+    digit and symbol. Rejected if found in a known-breached password list.
+  - display_name (string, optional): max 64 chars, stripped of control
+    characters.
+
+INPUT VALIDATION (mandatory)
+- Validate all fields against a strict schema (e.g. Pydantic) BEFORE any
+  business logic runs. Reject unknown fields.
+- Normalize email to lowercase; reject if it does not pass format check.
+- Enforce password policy server-side; never trust client validation.
+- Return 422 with a machine-readable error list when validation fails.
+
+AUTHENTICATION & AUTHORIZATION
+- This endpoint is public for self-registration but protected by a
+  per-IP and per-email rate limiter (see below).
+- Issued credentials use short-lived access tokens (15 min) plus a
+  rotating refresh token stored hashed server-side.
+- Passwords are hashed with Argon2id (memory>=64MB, time cost>=3).
+  Never store or log plaintext passwords.
+
+DATA ACCESS / PERSISTENCE
+- Use parameterized queries or an ORM with bound parameters ONLY.
+  String concatenation of user input into SQL is prohibited.
+- Wrap the insert in a transaction; roll back on any error.
+- Enforce a unique constraint on email at the database level and handle
+  the duplicate-key error as 409 Conflict.
+
+ERROR HANDLING
+- Map exceptions to explicit HTTP codes: 422 validation, 409 conflict,
+  429 rate limit, 500 internal.
+- Never leak stack traces, SQL, or internal identifiers in responses.
+- Return a stable error envelope: {code, message, details}.
+
+RATE LIMITING & ABUSE PREVENTION
+- Limit registration to 5 attempts per IP per 10 minutes.
+- Apply exponential backoff signaling via Retry-After on 429.
+
+LOGGING & OBSERVABILITY
+- Log a structured event per request with a correlation id.
+- Redact email (hash) and NEVER log password or token material.
+- Emit a metric for success/failure counts.
+
+DOCUMENTATION
+- Provide an OpenAPI schema for request, responses and all error codes.
+- Include at least one example request and one example error response.
+
+ACCEPTANCE CRITERIA
+- All inputs validated server-side; invalid payloads rejected with 422.
+- No plaintext secrets in storage or logs.
+- All DB access parameterized.
+- Rate limiting active and observable.
+- OpenAPI documentation present and accurate.

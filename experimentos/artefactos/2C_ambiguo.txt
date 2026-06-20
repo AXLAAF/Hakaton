@@ -1,0 +1,26 @@
+Skill: Login Handler
+Artifact type: skill
+Target: POST /api/v1/login
+
+PURPOSE
+Authenticate a user and return a session token. This skill defines the
+system instruction for an LLM-backed code assistant that implements or
+reviews the login flow.
+
+BEHAVIOR
+- Receives username and password.
+- Validates the credentials against the database using the native ORM.
+- If valid, generates a JWT and returns it to the caller.
+- Records the login attempt in the system logs.
+
+NOTES
+- The framework's native ORM is used for all database access.
+- The JWT is signed and returned in the response body.
+- Login attempts are recorded for auditing.
+
+[The specification intentionally does not state whether the native ORM
+sanitizes inputs automatically, whether rate limiting is applied, how the
+JWT secret is managed, whether tokens expire, or how expired/invalid
+tokens are handled. These omissions are deliberate: a reviewer must decide
+whether the underlying framework guarantees these properties or whether
+they are missing controls.]
