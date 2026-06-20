@@ -25,7 +25,17 @@ El usuario puede someter a la Arena cualquier **artefacto** (por ejemplo: un arc
 3. **Síntesis y Cuantificación Final:** El sistema recopila los 3 artefactos de evaluación, identifica discrepancias o alucinaciones ("le pediste que sume dos y sumó tres"), y emite un **resumen consolidado**. Finalmente, Process-Guard otorga una **calificación cuantificable final** al artefacto evaluado.
 
 ## 5. Resultados Esperados y Prototipo
-Al implementar este prototipo mediante acceso API, se espera demostrar que la revisión cruzada anula las alucinaciones críticas. Por ejemplo, si se evalúa una "skill" de desarrollo, las tres IAs darán su veredicto. Si un modelo asume erróneamente que la skill es segura, los otros dos la rechazarán apoyándose en fundamentos del SWEBOK. El resumen resultante advertirá al usuario y entregará una calificación baja, deteniendo la propagación del error.
+Al implementar este prototipo mediante acceso API, se espera demostrar que la revisión cruzada anula las alucinaciones críticas a través de una **evaluación cuantificable**.
+
+**Ejemplo Práctico de Cuantificación (Evaluación de un Artefacto - "Skill"):**
+1. **Artefacto sometido:** Un archivo de *Skill* (instrucciones del sistema) diseñado para crear endpoints de manejo de datos.
+2. **Evaluación de las 3 IAs (Basado en SWEBOK / ISO 25010):**
+   * *IA 1 (Ej. Claude):* Detecta falta de requisitos de validación de inputs. Otorga una métrica parcial de **60/100**.
+   * *IA 2 (Ej. GPT-4):* Alucina asumiendo erróneamente que el framework sanitizará los datos de forma nativa. Otorga una métrica de **95/100**.
+   * *IA 3 (Ej. Gemini):* Coincide con la IA 1, advirtiendo sobre vulnerabilidades de seguridad y deuda técnica. Otorga una métrica de **55/100**.
+3. **Síntesis y Calificación Final:** Process-Guard detecta la discrepancia de la IA 2 (identificando la alucinación por contraste). Sintetiza los reportes en un documento que expone el riesgo de inyección, y emite una **calificación cuantificable final de 70/100 (Estado: Requiere Revisión)**.
+
+Este flujo estandarizado advierte al usuario de forma objetiva, mitigando los riesgos antes de avanzar en el ciclo de vida del software.
 
 ## 6. Discusión
 Este enfoque transiciona la carga desde la "Gobernanza" corporativa/política hacia el **"AI Control"** técnico. En una industria emergente donde falta formación en ingeniería formal, es insostenible educar a cada desarrollador sobre todos los procesos existentes. En cambio, dotarlos de un verificador (Arena) que califique cuantitativamente sus proyectos establece un estándar de seguridad implacable y escalable.
